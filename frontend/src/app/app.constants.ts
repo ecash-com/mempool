@@ -189,6 +189,8 @@ export const languages: Language[] = [
    { code: 'zh', name: '中文' },            // Chinese
 ];
 
+export const ALPHANET_FORK_HEIGHT = 963648;
+
 export const specialBlocks = {
   '0': {
     labelEvent: 'Genesis',
@@ -220,59 +222,64 @@ export const specialBlocks = {
     labelEventCompleted: 'Block Subsidy has halved to 3.125 BTC per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
+  [ALPHANET_FORK_HEIGHT]: {
+    labelEvent: 'eCash alphanet fork',
+    labelEventCompleted: 'eCash alphanet forked from Bitcoin here',
+    networks: ['mainnet'],
+  },
   '1050000': {
-    labelEvent: 'Bitcoin\'s 5th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 1.5625 BTC per block',
+    labelEvent: 'eCash\'s 5th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 1.5625 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '1260000': {
-    labelEvent: 'Bitcoin\'s 6th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.78125 BTC per block',
+    labelEvent: 'eCash\'s 6th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.78125 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '1470000': {
-    labelEvent: 'Bitcoin\'s 7th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.390625 BTC per block',
+    labelEvent: 'eCash\'s 7th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.390625 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '1680000': {
-    labelEvent: 'Bitcoin\'s 8th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.1953125 BTC per block',
+    labelEvent: 'eCash\'s 8th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.1953125 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '1890000': {
-    labelEvent: 'Bitcoin\'s 9th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.09765625 BTC per block',
+    labelEvent: 'eCash\'s 9th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.09765625 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '2100000': {
-    labelEvent: 'Bitcoin\'s 10th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.04882812 BTC per block',
+    labelEvent: 'eCash\'s 10th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.04882812 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '2310000': {
-    labelEvent: 'Bitcoin\'s 11th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.02441406 BTC per block',
+    labelEvent: 'eCash\'s 11th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.02441406 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '2520000': {
-    labelEvent: 'Bitcoin\'s 12th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.01220703 BTC per block',
+    labelEvent: 'eCash\'s 12th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.01220703 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '2730000': {
-    labelEvent: 'Bitcoin\'s 13th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.00610351 BTC per block',
+    labelEvent: 'eCash\'s 13th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.00610351 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '2940000': {
-    labelEvent: 'Bitcoin\'s 14th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.00305175 BTC per block',
+    labelEvent: 'eCash\'s 14th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.00305175 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '3150000': {
-    labelEvent: 'Bitcoin\'s 15th Halving',
-    labelEventCompleted: 'Block Subsidy has halved to 0.00152587 BTC per block',
+    labelEvent: 'eCash\'s 15th Halving',
+    labelEventCompleted: 'Block Subsidy has halved to 0.00152587 ECX per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
   '3477600': {

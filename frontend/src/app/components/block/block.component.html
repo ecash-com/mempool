@@ -31,6 +31,14 @@
 
     <div class="grow"></div>
 
+    <button *ngIf="specialEvent(blockHeight) as event" type="button" class="btn btn-sm btn-warning container-button"
+      [ngbTooltip]="event.labelEventCompleted" placement="bottom">{{ event.labelEvent }}</button>
+
+    <button *ngIf="isPreFork(blockHeight)" type="button" class="btn btn-sm btn-secondary container-button"
+      i18n-ngbTooltip="block.pre-fork-tooltip"
+      ngbTooltip="Inherited Bitcoin history mined before the eCash fork at block 963,648."
+      placement="bottom" i18n="block.pre-fork|Pre-fork block">Pre-fork</button>
+
     <button *ngIf="block?.stale" type="button" class="btn btn-sm btn-danger container-button" i18n="block.stale|Stale block state">Stale</button>
 
     <button [routerLink]="['/' | relativeUrl]" class="btn btn-sm">&#10005;</button>
