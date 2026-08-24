@@ -18,6 +18,7 @@ import { CacheService } from '@app/services/cache.service';
 import { ServicesApiServices } from '@app/services/services-api.service';
 import { PreloadService } from '@app/services/preload.service';
 import { identifyPrioritizedTransactions } from '@app/shared/transaction.utils';
+import { specialBlocks, ALPHANET_FORK_HEIGHT } from '@app/app.constants';
 
 interface ComparisonStats {
   totalFees: number;
@@ -947,6 +948,16 @@ export class BlockComponent implements OnInit, OnDestroy {
   setAuditAvailable(available: boolean): void {
     this.auditAvailable = available;
     this.showAudit = this.auditAvailable && this.auditModeEnabled && this.auditSupported;
+  }
+
+  specialEvent(height: number): { labelEvent: string; labelEventCompleted: string; networks: string[] } | null {
+    const event = specialBlocks[height];
+    return event?.networks.includes(this.stateService.network || 'mainnet') ? event : null;
+  }
+
+  // Pre-fork amounts deliberately keep the ECX unit; this badge carries the context.
+  isPreFork(height: number): boolean {
+    return height != null && height < ALPHANET_FORK_HEIGHT;
   }
 
   toggleAuditMode(): void {

@@ -63,9 +63,9 @@ describe('Calculator', () => {
         cy.get('.fiat-text').should('be.visible');
       });
 
-      it('shows input labels for currency, BTC, and sats', () => {
-        cy.get('.input-group-text').contains('BTC').should('be.visible');
-        cy.get('.input-group-text').contains('sats').should('be.visible');
+      it('shows input labels for currency, ECX, and szats', () => {
+        cy.get('.input-group-text').contains('ECX').should('be.visible');
+        cy.get('.input-group-text').contains('szats').should('be.visible');
       });
     });
 
@@ -158,11 +158,11 @@ describe('Calculator', () => {
       });
     });
 
-    describe('max supply (21M BTC)', () => {
-      it('shows warning when entering 21M BTC', () => {
+    describe('max supply (21M ECX)', () => {
+      it('shows warning when entering 21M ECX', () => {
         cy.get('input[formControlName="bitcoin"]').clear().type('21000000');
         cy.get('.alert.alert-warning').should('be.visible');
-        cy.get('.alert.alert-warning').should('contain', 'Values were capped at the max supply of 21M BTC');
+        cy.get('.alert.alert-warning').should('contain', 'Values were capped at the max supply of 21M ECX');
         cy.get('input[formControlName="bitcoin"]').invoke('val').should('equal', '21000000');
         cy.get('input[formControlName="satoshis"]').invoke('val').should('equal', '2100000000000000');
       });
