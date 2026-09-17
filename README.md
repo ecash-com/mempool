@@ -1,7 +1,7 @@
 # mempool-ecx
 
 A fork of [mempool/mempool](https://github.com/mempool/mempool), the block
-explorer for the eCash alphanet. See the upstream repo for general
+explorer for the eCash betanet. See the upstream repo for general
 documentation and installation instructions.
 
 The `ecx` branch is a rebasable patch series on top of an upstream release

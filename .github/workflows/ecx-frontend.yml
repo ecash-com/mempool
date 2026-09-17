@@ -53,4 +53,4 @@ jobs:
           build-args: commitHash=${{ env.SHORT_SHA }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/mempool-frontend:sha-${{ env.SHORT_SHA }}
-            ghcr.io/${{ github.repository_owner }}/mempool-frontend:alphanet
+            ghcr.io/${{ github.repository_owner }}/mempool-frontend:betanet

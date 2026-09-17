@@ -9,9 +9,9 @@ import { StateService } from '@app/services/state.service';
 })
 export class SeoService {
   network = '';
-  baseTitle = 'eCash Alphanet Explorer';
-  baseDescription = 'Blocks, transactions, mempool and mining pools for the eCash alphanet.';
-  baseDomain = 'explorer.alpha.ecash.ninja';
+  baseTitle = 'eCash Betanet Explorer';
+  baseDescription = 'Blocks, transactions, mempool and mining pools for the eCash betanet.';
+  baseDomain = 'explorer.beta.ecash.ninja';
 
   canonicalLink: HTMLLinkElement = document.getElementById('canonical') as HTMLLinkElement;
 

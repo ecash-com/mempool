@@ -189,7 +189,7 @@ export const languages: Language[] = [
    { code: 'zh', name: '中文' },            // Chinese
 ];
 
-export const ALPHANET_FORK_HEIGHT = 963648;
+export const BETANET_FORK_HEIGHT = 967680;
 
 export const specialBlocks = {
   '0': {
@@ -222,9 +222,9 @@ export const specialBlocks = {
     labelEventCompleted: 'Block Subsidy has halved to 3.125 BTC per block',
     networks: ['mainnet', 'testnet', 'testnet4'],
   },
-  [ALPHANET_FORK_HEIGHT]: {
-    labelEvent: 'eCash alphanet fork',
-    labelEventCompleted: 'eCash alphanet forked from Bitcoin here',
+  [BETANET_FORK_HEIGHT]: {
+    labelEvent: 'eCash betanet fork',
+    labelEventCompleted: 'eCash betanet forked from Bitcoin here',
     networks: ['mainnet'],
   },
   '1050000': {
