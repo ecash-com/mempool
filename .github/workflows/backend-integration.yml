@@ -14,7 +14,7 @@ jobs:
       matrix:
         node: ["26.12.1"]
       fail-fast: false
-    runs-on: mempool-ci
+    runs-on: ubuntu-latest
 
     name: Backend Integration Tests - node ${{ matrix.node }}
     
