@@ -79,6 +79,13 @@ export function calcBitsDifference(oldBits: number, newBits: number): number {
   return result > 300 ? 300 : result < -75 ? -75 : result;
 }
 
+// eCash (ecash-com/bitcoin src/pow.cpp): from ECASH_HEIGHT difficulty retargets
+// every 288 blocks, damped as new_target = old_target * (6T + actual) / 7T.
+export const ECASH_HEIGHT = 973728;
+export function epochLength(height: number): number {
+  return height >= ECASH_HEIGHT ? 288 : 2016;
+}
+
 export function calcDifficultyAdjustment(
   DATime: number,
   quarterEpochTime: number | null,
@@ -88,7 +95,8 @@ export function calcDifficultyAdjustment(
   network: string,
   latestBlockTimestamp: number,
 ): DifficultyAdjustment {
-  const EPOCH_BLOCK_LENGTH = 2016; // Bitcoin mainnet
+  const EPOCH_BLOCK_LENGTH = epochLength(blockHeight + 1);
+  const ecash = EPOCH_BLOCK_LENGTH !== 2016;
   const BLOCK_SECONDS_TARGET = 600; // Bitcoin mainnet
   const TESTNET_MAX_BLOCK_SECONDS = 1200; // Bitcoin testnet
 
@@ -98,7 +106,7 @@ export function calcDifficultyAdjustment(
   const remainingBlocks = EPOCH_BLOCK_LENGTH - blocksInEpoch;
   const nextRetargetHeight = (blockHeight >= 0) ? blockHeight + remainingBlocks : 0;
   const expectedBlocks = diffSeconds / BLOCK_SECONDS_TARGET;
-  const actualTimespan = (blocksInEpoch === 2015 ? latestBlockTimestamp : nowSeconds) - DATime;
+  const actualTimespan = (blocksInEpoch === EPOCH_BLOCK_LENGTH - 1 ? latestBlockTimestamp : nowSeconds) - DATime;
 
   let difficultyChange = 0;
   let timeAvgSecs = blocksInEpoch ? diffSeconds / blocksInEpoch : BLOCK_SECONDS_TARGET;
@@ -106,7 +114,7 @@ export function calcDifficultyAdjustment(
 
   // for the first 504 blocks of the epoch, calculate the expected avg block interval
   // from a sliding window over the last 504 blocks
-  if (quarterEpochTime && blocksInEpoch < 503) {
+  if (quarterEpochTime && !ecash && blocksInEpoch < 503) {
     const timeLastEpoch = DATime - quarterEpochTime;
     const adjustedTimeLastEpoch = timeLastEpoch * (1 + (previousRetarget / 100));
     const adjustedTimeSpan = diffSeconds + adjustedTimeLastEpoch;
@@ -114,6 +122,12 @@ export function calcDifficultyAdjustment(
     difficultyChange = (BLOCK_SECONDS_TARGET / (adjustedTimeSpan / 504) - 1) * 100;
   } else {
     difficultyChange = (BLOCK_SECONDS_TARGET / (actualTimespan / (blocksInEpoch + 1)) - 1) * 100;
+  }
+
+  if (ecash) {
+    // actual/T, clamped to [1/4, 4], fed through the damped retarget
+    const ratio = Math.min(Math.max(100 / (difficultyChange + 100), 0.25), 4);
+    difficultyChange = (7 / (6 + ratio) - 1) * 100;
   }
 
   // Max increase is x4 (+300%)
