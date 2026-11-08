@@ -120,7 +120,6 @@ import { MempoolBlockOverviewComponent } from '@components/mempool-block-overvie
 import { ClockchainComponent } from '@components/clockchain/clockchain.component';
 import { ClockFaceComponent } from '@components/clock-face/clock-face.component';
 import { ClockComponent } from '@components/clock/clock.component';
-import { CalculatorComponent } from '@components/calculator/calculator.component';
 import { BitcoinsatoshisPipe } from '@app/shared/pipes/bitcoinsatoshis.pipe';
 import { HttpErrorComponent } from '@app/shared/components/http-error/http-error.component';
 import { TwitterWidgetComponent } from '@components/twitter-widget/twitter-widget.component';
@@ -231,7 +230,6 @@ import { GithubLogin } from '@components/github-login.component/github-login.com
     GeolocationComponent,
     TestnetAlertComponent,
     GlobalFooterComponent,
-    CalculatorComponent,
     BitcoinsatoshisPipe,
     BlockViewComponent,
     EightBlocksComponent,
