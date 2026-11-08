@@ -112,6 +112,31 @@ describe('Mempool Difficulty Adjustment', () => {
           expectedBlocks: 2045.66,
         },
       ],
+      [ // Vector 3 (eCash: 288-block damped retarget)
+        [ // Inputs
+          1793769985,                     // Last DA time (block 982944)
+          1793665925,                     // timestamp of 504 blocks ago (ignored after eCash fork)
+          1794063663,                     // Current time (now)
+          983191,                         // Current block height
+          5.989622875596723,              // Previous retarget %
+          'mainnet',
+          1794059736,                     // Latest block timestamp
+        ],
+        { // Expected Result
+          progressPercent: 85.76388888888889,
+          difficultyChange: -12.210761598613718,
+          estimatedRetargetDate: 1794112411139,
+          remainingBlocks: 41,
+          remainingTime: 48748139,
+          previousRetarget: 5.989622875596723,
+          previousTime: 1793769985,
+          nextRetargetHeight: 983232,
+          timeAvg: 1188979,
+          adjustedTimeAvg: 1188979,
+          timeOffset: 0,
+          expectedBlocks: 489.4633333333333,
+        },
+      ],
     ] as [[number, number, number, number, number, string, number], DifficultyAdjustment][];
 
     for (const vector of vectors) {
