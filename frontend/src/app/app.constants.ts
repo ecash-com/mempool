@@ -191,6 +191,20 @@ export const languages: Language[] = [
 
 export const ECASH_FORK_HEIGHT = 973728;
 
+// Where each network forked to eCash, as ecash-com/bitcoin's EcashHeight; a
+// network without one follows Bitcoin's rules throughout.
+const ECASH_FORK_HEIGHTS: Record<string, number> = { mainnet: ECASH_FORK_HEIGHT };
+
+export function ecashForkHeight(network: string): number | undefined {
+  return ECASH_FORK_HEIGHTS[network || 'mainnet'];
+}
+
+// Blocks per difficulty epoch, as the backend's epochLength().
+export function epochLength(height: number, network: string): number {
+  const forkHeight = ecashForkHeight(network);
+  return forkHeight !== undefined && height >= forkHeight ? 288 : 2016;
+}
+
 export const specialBlocks = {
   '0': {
     labelEvent: 'Genesis',

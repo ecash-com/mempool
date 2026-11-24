@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, El
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StateService } from '@app/services/state.service';
+import { epochLength } from '@app/app.constants';
 
 interface EpochProgress {
   base: string;
@@ -33,8 +34,6 @@ interface DiffShape {
   expected: boolean;
 }
 
-const EPOCH_BLOCK_LENGTH = 288; // eCash: retarget every 288 blocks
-
 @Component({
   selector: 'app-difficulty',
   templateUrl: './difficulty.component.html',
@@ -56,6 +55,7 @@ export class DifficultyComponent implements OnInit {
   userSelectedMode: boolean = false;
 
   now: number = Date.now();
+  epochLength: number;
   epochStart: number;
   currentHeight: number;
   currentIndex: number;
@@ -105,7 +105,8 @@ export class DifficultyComponent implements OnInit {
 
         const blocksUntilHalving = 210000 - (maxHeight % 210000);
         const timeUntilHalving = new Date().getTime() + (blocksUntilHalving * 600000);
-        const newEpochStart = Math.floor(this.stateService.latestBlockHeight / EPOCH_BLOCK_LENGTH) * EPOCH_BLOCK_LENGTH;
+        this.epochLength = epochLength(this.stateService.latestBlockHeight + 1, this.stateService.network);
+        const newEpochStart = Math.floor(this.stateService.latestBlockHeight / this.epochLength) * this.epochLength;
         const newExpectedHeight = Math.floor(newEpochStart + da.expectedBlocks);
         this.now = new Date().getTime();
         this.nextSubsidy = getNextBlockSubsidy(maxHeight);
@@ -119,7 +120,7 @@ export class DifficultyComponent implements OnInit {
           this.expectedHeight = newExpectedHeight;
           this.currentHeight = this.stateService.latestBlockHeight;
           this.currentIndex = this.currentHeight - this.epochStart;
-          this.expectedIndex = Math.min(this.expectedHeight - this.epochStart, EPOCH_BLOCK_LENGTH) - 1;
+          this.expectedIndex = Math.min(this.expectedHeight - this.epochStart, this.epochLength) - 1;
           this.difference = this.currentIndex - this.expectedIndex;
 
           this.shapes = [];
@@ -132,13 +133,13 @@ export class DifficultyComponent implements OnInit {
           this.shapes = this.shapes.concat(this.blocksToShapes(
             this.expectedIndex + 1, this.currentIndex, 'ahead', false
           ));
-          if (this.currentIndex < EPOCH_BLOCK_LENGTH - 1) {
+          if (this.currentIndex < this.epochLength - 1) {
             this.shapes = this.shapes.concat(this.blocksToShapes(
               this.currentIndex + 1, this.currentIndex + 1, 'next', (this.expectedIndex > this.currentIndex)
             ));
           }
           this.shapes = this.shapes.concat(this.blocksToShapes(
-            Math.max(this.currentIndex + 2, this.expectedIndex + 1), EPOCH_BLOCK_LENGTH - 1, 'remaining', false
+            Math.max(this.currentIndex + 2, this.expectedIndex + 1), this.epochLength - 1, 'remaining', false
           ));
         }
 

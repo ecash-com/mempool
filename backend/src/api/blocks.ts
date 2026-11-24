@@ -998,7 +998,7 @@ class Blocks {
       const blockchainInfo = await bitcoinClient.getBlockchainInfo();
       this.updateTimerProgress(timer, 'got blockchain info for initial difficulty adjustment');
       if (blockchainInfo.blocks === blockchainInfo.headers) {
-        const heightDiff = blockHeightTip % epochLength(blockHeightTip);
+        const heightDiff = blockHeightTip % epochLength(blockHeightTip, config.MEMPOOL.NETWORK);
         const blockHash = await bitcoinApi.$getBlockHash(blockHeightTip - heightDiff);
         this.updateTimerProgress(timer, 'got block hash for initial difficulty adjustment');
         const block: IEsploraApi.Block = await bitcoinApi.$getBlock(blockHash);
@@ -1106,7 +1106,7 @@ class Blocks {
       this.updateTimerProgress(timer, `starting async callbacks for ${this.currentBlockHeight}`);
       const callbackPromises = this.newAsyncBlockCallbacks.map((cb) => cb(blockExtended, txIds, cpfpSummary.transactions));
 
-      if (block.height % epochLength(block.height) === 0) {
+      if (block.height % epochLength(block.height, config.MEMPOOL.NETWORK) === 0) {
         if (Common.indexingEnabled()) {
           let adjustment;
           if (['liquid', 'liquidtestnet'].includes(config.MEMPOOL.NETWORK)) {

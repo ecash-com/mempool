@@ -79,11 +79,14 @@ export function calcBitsDifference(oldBits: number, newBits: number): number {
   return result > 300 ? 300 : result < -75 ? -75 : result;
 }
 
-// eCash (ecash-com/bitcoin src/pow.cpp): from ECASH_HEIGHT difficulty retargets
-// every 288 blocks, damped as new_target = old_target * (6T + actual) / 7T.
-export const ECASH_HEIGHT = 973728;
-export function epochLength(height: number): number {
-  return height >= ECASH_HEIGHT ? 288 : 2016;
+// eCash (ecash-com/bitcoin src/pow.cpp): from a network's EcashHeight
+// difficulty retargets every 288 blocks, damped as
+// new_target = old_target * (6T + actual) / 7T. Only mainnet sets one; every
+// other network keeps Bitcoin's rule, as with EcashHeight=0 in Core.
+const ECASH_HEIGHTS: Record<string, number> = { mainnet: 973728 };
+export function epochLength(height: number, network: string): number {
+  const ecashHeight = ECASH_HEIGHTS[network];
+  return ecashHeight !== undefined && height >= ecashHeight ? 288 : 2016;
 }
 
 export function calcDifficultyAdjustment(
@@ -95,7 +98,7 @@ export function calcDifficultyAdjustment(
   network: string,
   latestBlockTimestamp: number,
 ): DifficultyAdjustment {
-  const EPOCH_BLOCK_LENGTH = epochLength(blockHeight + 1);
+  const EPOCH_BLOCK_LENGTH = epochLength(blockHeight + 1, network);
   const ecash = EPOCH_BLOCK_LENGTH !== 2016;
   const BLOCK_SECONDS_TARGET = 600; // Bitcoin mainnet
   const TESTNET_MAX_BLOCK_SECONDS = 1200; // Bitcoin testnet
