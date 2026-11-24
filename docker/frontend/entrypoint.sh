@@ -106,14 +106,37 @@ folder=$(find /var/www/mempool -name "config.js" | xargs dirname)
 echo ${folder}
 envsubst < ${folder}/config.template.js > ${folder}/config.js
 
-# Link previews and the canonical link are compiled into each locale's
-# index.html, since unfurlers run no JavaScript, and name the mainnet explorer.
-# CANONICAL_URL points them at this deployment instead.
+# Link previews, the title and the canonical link are compiled into each
+# locale's index.html, since unfurlers run no JavaScript, and describe the
+# mainnet explorer. CANONICAL_URL, SITE_TITLE and SITE_DESCRIPTION point them
+# at this deployment instead.
+__INDEX_FILES__=$(find /var/www/mempool -name index.html)
+# As an HTML attribute value, then as a sed replacement.
+meta_value() {
+  printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/"/\&quot;/g' -e 's/</\&lt;/g' -e 's/[\\#&]/\\&/g'
+}
 if [ -n "${CANONICAL_URL}" ]; then
-  __CANONICAL_URL__=${CANONICAL_URL%/}
-  find /var/www/mempool -name index.html -exec sed -i \
-    -e "s|https://explorer.ecash.com|${__CANONICAL_URL__}|g" \
-    -e "s|content=\"explorer.ecash.com\"|content=\"${__CANONICAL_URL__#*://}\"|g" {} +
+  __CANONICAL_URL__=$(meta_value "${CANONICAL_URL%/}")
+  # shellcheck disable=SC2086
+  sed -i \
+    -e "s#https://explorer.ecash.com#${__CANONICAL_URL__}#g" \
+    -e "s#content=\"explorer.ecash.com\"#content=\"${__CANONICAL_URL__#*://}\"#g" \
+    $__INDEX_FILES__
+fi
+if [ -n "${SITE_TITLE}" ]; then
+  __SITE_TITLE__=$(meta_value "${SITE_TITLE}")
+  # shellcheck disable=SC2086
+  sed -i -E \
+    -e "s#<title>[^<]*</title>#<title>${__SITE_TITLE__}</title>#" \
+    -e "s#(<meta (name|property)=\"(og:title|og:site_name|twitter:title)\" content=\")[^\"]*\"#\1${__SITE_TITLE__}\"#" \
+    $__INDEX_FILES__
+fi
+if [ -n "${SITE_DESCRIPTION}" ]; then
+  __SITE_DESCRIPTION__=$(meta_value "${SITE_DESCRIPTION}")
+  # shellcheck disable=SC2086
+  sed -i -E \
+    -e "s#(<meta (name|property)=\"(description|og:description|twitter:description)\" content=\")[^\"]*\"#\1${__SITE_DESCRIPTION__}\"#" \
+    $__INDEX_FILES__
 fi
 
 exec "$@"
