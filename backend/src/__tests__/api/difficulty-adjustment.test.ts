@@ -2,6 +2,7 @@ import {
   calcBitsDifference,
   calcDifficultyAdjustment,
   DifficultyAdjustment,
+  epochLength,
 } from '../../api/difficulty-adjustment';
 
 describe('Mempool Difficulty Adjustment', () => {
@@ -145,6 +146,23 @@ describe('Mempool Difficulty Adjustment', () => {
       expect(result.previousRetarget).toStrictEqual(vector[0][4]);
       expect(result).toStrictEqual(vector[1]);
     }
+  });
+
+  test('should apply the eCash retarget only on networks that forked', () => {
+    expect(epochLength(973727, 'mainnet')).toEqual(2016);
+    expect(epochLength(973728, 'mainnet')).toEqual(288);
+    expect(epochLength(973728, 'signet')).toEqual(2016);
+    expect(epochLength(973728, 'testnet4')).toEqual(2016);
+
+    // Vector 3's inputs on signet: Bitcoin's undamped 2016-block retarget
+    const DATime = 1793769985;
+    const now = 1794063663;
+    const result = calcDifficultyAdjustment(DATime, 1793665925, now, 983191, 5.989622875596723, 'signet', 1794059736);
+    const blocksInEpoch = 983191 % 2016;
+    expect(result.remainingBlocks).toEqual(2016 - blocksInEpoch);
+    expect(result.nextRetargetHeight).toEqual(983808);
+    expect(result.progressPercent).toEqual(blocksInEpoch / 2016 * 100);
+    expect(result.difficultyChange).toEqual((600 / ((now - DATime) / (blocksInEpoch + 1)) - 1) * 100);
   });
 
   test('should calculate Difficulty change from bits fields of two blocks', () => {

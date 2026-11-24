@@ -18,7 +18,7 @@ import { CacheService } from '@app/services/cache.service';
 import { ServicesApiServices } from '@app/services/services-api.service';
 import { PreloadService } from '@app/services/preload.service';
 import { identifyPrioritizedTransactions } from '@app/shared/transaction.utils';
-import { specialBlocks, ECASH_FORK_HEIGHT } from '@app/app.constants';
+import { specialBlocks, ecashForkHeight } from '@app/app.constants';
 
 interface ComparisonStats {
   totalFees: number;
@@ -957,7 +957,8 @@ export class BlockComponent implements OnInit, OnDestroy {
 
   // Pre-fork amounts deliberately keep the ECX unit; this badge carries the context.
   isPreFork(height: number): boolean {
-    return height != null && height < ECASH_FORK_HEIGHT;
+    const forkHeight = ecashForkHeight(this.stateService.network);
+    return height != null && forkHeight !== undefined && height < forkHeight;
   }
 
   toggleAuditMode(): void {

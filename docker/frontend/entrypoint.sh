@@ -106,4 +106,14 @@ folder=$(find /var/www/mempool -name "config.js" | xargs dirname)
 echo ${folder}
 envsubst < ${folder}/config.template.js > ${folder}/config.js
 
+# Link previews and the canonical link are compiled into each locale's
+# index.html, since unfurlers run no JavaScript, and name the mainnet explorer.
+# CANONICAL_URL points them at this deployment instead.
+if [ -n "${CANONICAL_URL}" ]; then
+  __CANONICAL_URL__=${CANONICAL_URL%/}
+  find /var/www/mempool -name index.html -exec sed -i \
+    -e "s|https://explorer.ecash.com|${__CANONICAL_URL__}|g" \
+    -e "s|content=\"explorer.ecash.com\"|content=\"${__CANONICAL_URL__#*://}\"|g" {} +
+fi
+
 exec "$@"

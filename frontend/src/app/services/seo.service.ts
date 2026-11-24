@@ -92,7 +92,7 @@ export class SeoService {
     if (this.network === 'testnet4')
       {return this.baseTitle + ' - Bitcoin Testnet4';}
     if (this.network === 'signet')
-      {return this.baseTitle + ' - Bitcoin Signet';}
+      {return this.baseTitle + ' - Signet';}
     if (this.network === 'liquid')
       {return this.baseTitle + ' - Liquid Network';}
     if (this.network === 'liquidtestnet')
